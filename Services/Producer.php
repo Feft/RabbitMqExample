@@ -19,7 +19,7 @@ class Producer
     {
         # Rabbit MQ want the message to be serialized
 //        $this->producer->publish(serialize($message));
-        # but I have a serialized message
+        # but I have a serialized message (in controller class)
         $this->producer->publish(($message));
     }
 }
