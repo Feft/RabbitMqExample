@@ -4,6 +4,21 @@ Learn how to use RabbitMq with Symfony3
 
 Symfony configuration:
 ----------------------
+Require the bundle in your composer.json file: 
+```
+"require":  {
+     "php-amqplib/php-amqplib": ">=2.6.1"
+}
+```
+Register the bundle in app/AppKernel.php file:
+```
+public function registerBundles()
+{
+    $bundles = array(
+        new OldSound\RabbitMqBundle\OldSoundRabbitMqBundle(),
+    );
+}
+```
 app/config/config.yml:
 ```
 # OldSoundRabbitMq Configuration
