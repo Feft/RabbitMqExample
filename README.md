@@ -36,10 +36,19 @@ old_sound_rabbit_mq:
             connection:       default
             exchange_options: {name: 'api-call', type: direct}
             queue_options:    {name: 'api_call'}
+    consumers:
+        api_call:
+            connection:       default
+            exchange_options: {name: 'api_call', type: direct}
+            queue_options:    {name: 'api_call'}
+            callback:         example_consumer_service
 ```
 app/config/services.yml in services section:
 ```
     producer_service:
         class: AppBundle\Services\Producer
         arguments: ["@old_sound_rabbit_mq.api_call_producer"]
+    # consumer example
+    example_consumer_service:
+        class:      AppBundle\Services\ExampleConsumer
 ```
