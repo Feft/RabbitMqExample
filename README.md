@@ -42,6 +42,7 @@ old_sound_rabbit_mq:
             exchange_options: {name: 'api_call', type: direct}
             queue_options:    {name: 'api_call'}
             callback:         example_consumer_service
+            qos_options:      {prefetch_size: 0, prefetch_count: 1, global: false}
 ```
 app/config/services.yml in services section:
 ```
