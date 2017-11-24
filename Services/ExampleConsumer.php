@@ -19,7 +19,7 @@ class ExampleConsumer implements ConsumerInterface
      */
     public function execute(AMQPMessage $msg)
     {
-        $message = unserialize($msg->getBody());
+        $message = json_decode($msg->getBody(),true);
         echo 'received message '.$message['id']. ', created at '.$message['datetime']. "\r\n";
         sleep(1);
     }

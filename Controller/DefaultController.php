@@ -27,7 +27,7 @@ class DefaultController extends Controller
      */
     public function messagePublishAction()
     {
-        $this->get("old_sound_rabbit_mq.api_call_producer")->publish(serialize($this->getData()));
+        $this->get("old_sound_rabbit_mq.api_call_producer")->publish(json_encode($this->getData()));
         return new JsonResponse();
     }
 
