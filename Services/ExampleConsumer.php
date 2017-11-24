@@ -2,13 +2,22 @@
 
 namespace AppBundle\Services;
 
+use AppBundle\Entity\Data;
+use Doctrine\ORM\EntityManager;
 use OldSound\RabbitMqBundle\RabbitMq\ConsumerInterface;
 use PhpAmqpLib\Message\AMQPMessage;
 
 class ExampleConsumer implements ConsumerInterface
 {
-    public function __construct()
+    /**
+     * @var EntityManager
+     */
+    protected $em;
+
+    public function __construct(EntityManager $em)
     {
+        $this->em = $em;
+
         echo ExampleConsumer::class . " is listening \r\n";
     }
 
@@ -20,7 +29,17 @@ class ExampleConsumer implements ConsumerInterface
     public function execute(AMQPMessage $msg)
     {
         $message = json_decode($msg->getBody(),true);
+        $data = $this->createDataObject($msg->getBody());
+        $this->em->persist($data);
+        $this->em->flush();
         echo 'received message '.$message['id']. ', created at '.$message['datetime']. "\r\n";
-        sleep(1);
+        sleep(0.1);
+    }
+
+    private function createDataObject($desc)
+    {
+        $data = new Data();
+        $data->setDescription($desc);
+        return $data;
     }
 }

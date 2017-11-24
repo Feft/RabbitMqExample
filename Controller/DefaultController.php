@@ -23,25 +23,31 @@ class DefaultController extends Controller
     /**
      * RabbitMq message publish
      *
-     * @Route("/produce", name="produce")
+     * @Route("/produce/{amount}", name="produce")
+     * @param int amount Amount of messages to produce
+     *
+     * @return JsonResponse
      */
-    public function messagePublishAction()
+    public function messagePublishAction($amount)
     {
-        $this->get("old_sound_rabbit_mq.api_call_producer")->publish(json_encode($this->getData()));
+        for ($i=1;$i<$amount;$i++) {
+           $this->get("old_sound_rabbit_mq.api_call_producer")->publish(json_encode($this->getData($i)));
+        }
         return new JsonResponse();
     }
 
     /**
      * Test data.
-     *
+     * @param int id 
      * @return string
      */
-    private function getData()
+    private function getData($id)
     {
         $datetime = new \DateTime();
         return
             [
-                'id' => random_int(1, PHP_INT_MAX),
+//                'id' => random_int(1, PHP_INT_MAX),
+                'id' => $id,
                 'desc' => 'Lorem ipsum',
                 'datetime' => $datetime->format('Y-m-d H:i:s')
             ];
