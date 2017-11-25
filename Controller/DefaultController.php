@@ -4,27 +4,15 @@ namespace AppBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 class DefaultController extends Controller
 {
     /**
-     * @Route("/", name="homepage")
-     */
-    public function indexAction(Request $request)
-    {
-        // replace this example code with whatever you need
-        return $this->render('default/index.html.twig', [
-            'base_dir' => realpath($this->getParameter('kernel.project_dir')) . DIRECTORY_SEPARATOR,
-        ]);
-    }
-
-    /**
      * RabbitMq message publish
      *
      * @Route("/produce/{amount}", name="produce_message")
-     * @param int amount Amount of messages to produce
+     * @param int $amount Amount of messages to produce
      *
      * @return JsonResponse
      */
@@ -39,7 +27,7 @@ class DefaultController extends Controller
     /**
      * Calculate the amount of data to produce, if no value is given, it returns 1.
      *
-     * @param $amount Amount of data to produce
+     * @param string|null $amount Amount of data to produce
      *
      * @return int
      */
@@ -51,7 +39,9 @@ class DefaultController extends Controller
 
     /**
      * Test data.
-     * @param int id
+     *
+     * @param int $id
+     *
      * @return string
      */
     private function getData($id)

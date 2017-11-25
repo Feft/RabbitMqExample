@@ -39,14 +39,16 @@ class ExampleConsumer implements ConsumerInterface
         echo 'received message ' . $message['id'] . ', created at ' . $message['datetime'] . ",\r\n" .
             "highest common factor of " . $message["firstValue"] . " and " . $message["secondValue"] . " is " . $hcf . "\r\n";
 //        sleep(0.1);
+
+        return true;
     }
 
     /**
      * Calculate highest common factor of two numbers.
      * @see http://funkcje.net/view/2/3304/index.html
      *
-     * @param $a first value
-     * @param $b second value
+     * @param $a mixed first value
+     * @param $b mixed second value
      *
      * @return int highest common factor
      */
