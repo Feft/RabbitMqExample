@@ -23,22 +23,35 @@ class DefaultController extends Controller
     /**
      * RabbitMq message publish
      *
-     * @Route("/produce/{amount}", name="produce")
+     * @Route("/produce/{amount}", name="produce_message")
      * @param int amount Amount of messages to produce
      *
      * @return JsonResponse
      */
     public function messagePublishAction($amount)
     {
-        for ($i=1;$i<$amount;$i++) {
-           $this->get("old_sound_rabbit_mq.api_call_producer")->publish(json_encode($this->getData($i)));
+        for ($i = 1; $i <= $this->calculateAmountOfData($amount); $i++) {
+            $this->get("old_sound_rabbit_mq.api_call_producer")->publish(json_encode($this->getData($i)));
         }
         return new JsonResponse();
     }
 
     /**
+     * Calculate the amount of data to produce, if no value is given, it returns 1.
+     *
+     * @param $amount Amount of data to produce
+     *
+     * @return int
+     */
+    private function calculateAmountOfData($amount)
+    {
+        $amount = (int)$amount;
+        return $amount > 0 ? $amount : 1;
+    }
+
+    /**
      * Test data.
-     * @param int id 
+     * @param int id
      * @return string
      */
     private function getData($id)
