@@ -51,7 +51,7 @@ class DefaultController extends Controller
             [
 //                'id' => random_int(1, PHP_INT_MAX),
                 'id' => $id,
-                'firstValue' => random_int(1,2048),
+                'firstValue' => random_int(1,500),
                 'secondValue' => random_int(1,2048),
                 'desc' => 'Lorem ipsum',
                 'datetime' => $datetime->format('Y-m-d H:i:s')

@@ -2,6 +2,7 @@
 
 namespace AppBundle\Services;
 
+use AppBundle\Domain\HighestCommonFactorCalculator;
 use AppBundle\Entity\Data;
 use Doctrine\ORM\EntityManager;
 use OldSound\RabbitMqBundle\RabbitMq\ConsumerInterface;
@@ -37,8 +38,9 @@ class ExampleConsumer implements ConsumerInterface
     {
         # message to array
         $message = json_decode($msg->getBody(), true);
-        $hcf = $this->calculateHighestCommonFactor($message["firstValue"], $message["secondValue"]);
-        $message["hcf"] = $hcf;
+
+        $hcfCalculator = new HighestCommonFactorCalculator();
+        $message["hcf"] = $hcfCalculator->calculate($message["firstValue"], $message["secondValue"]);
 
         #create and save the data object
         $data = $this->createDataObject(json_encode($message));
@@ -62,31 +64,6 @@ class ExampleConsumer implements ConsumerInterface
     {
         return 'received message ' . $message['id'] . ', created at ' . $message['datetime'] . ",\r\n" .
             "highest common factor of " . $message["firstValue"] . " and " . $message["secondValue"] . " is " . $message["hcf"] . "\r\n";
-    }
-
-    /**
-     * Calculate highest common factor of two numbers.
-     * @see http://funkcje.net/view/2/3304/index.html
-     *
-     * @param $a mixed first value
-     * @param $b mixed second value
-     *
-     * @return int highest common factor
-     */
-    private function calculateHighestCommonFactor($a, $b)
-    {
-        $a = (int)$a;
-        $b = (int)$b;
-
-        while ($a !== $b) {
-            if ($a < $b) {
-                $helper = $a;
-                $a = $b;
-                $b = $helper;
-            }
-            $a = $a - $b;
-        }
-        return $a;
     }
 
     /**
