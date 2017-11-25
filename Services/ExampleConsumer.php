@@ -28,12 +28,42 @@ class ExampleConsumer implements ConsumerInterface
      */
     public function execute(AMQPMessage $msg)
     {
-        $message = json_decode($msg->getBody(),true);
-        $data = $this->createDataObject($msg->getBody());
+        $message = json_decode($msg->getBody(), true);
+        $hcf = $this->calculateHighestCommonFactor($message["firstValue"], $message["secondValue"]);
+        $message["hcf"] = $hcf;
+
+        $data = $this->createDataObject(json_encode($message));
         $this->em->persist($data);
         $this->em->flush();
-        echo 'received message '.$message['id']. ', created at '.$message['datetime']. "\r\n";
-        sleep(0.1);
+
+        echo 'received message ' . $message['id'] . ', created at ' . $message['datetime'] . ",\r\n" .
+            "highest common factor of " . $message["firstValue"] . " and " . $message["secondValue"] . " is " . $hcf . "\r\n";
+//        sleep(0.1);
+    }
+
+    /**
+     * Calculate highest common factor of two numbers.
+     * @see http://funkcje.net/view/2/3304/index.html
+     *
+     * @param $a first value
+     * @param $b second value
+     *
+     * @return int highest common factor
+     */
+    private function calculateHighestCommonFactor($a, $b)
+    {
+        $a = (int)$a;
+        $b = (int)$b;
+
+        while ($a !== $b) {
+            if ($a < $b) {
+                $helper = $a;
+                $a = $b;
+                $b = $helper;
+            }
+            $a = $a - $b;
+        }
+        return $a;
     }
 
     private function createDataObject($desc)
