@@ -28,10 +28,12 @@ class ExampleConsumer implements ConsumerInterface
      */
     public function execute(AMQPMessage $msg)
     {
+        # message to array
         $message = json_decode($msg->getBody(), true);
         $hcf = $this->calculateHighestCommonFactor($message["firstValue"], $message["secondValue"]);
         $message["hcf"] = $hcf;
 
+        #create and save the data object
         $data = $this->createDataObject(json_encode($message));
         $this->em->persist($data);
         $this->em->flush();
@@ -68,6 +70,13 @@ class ExampleConsumer implements ConsumerInterface
         return $a;
     }
 
+    /**
+     * Create object
+     *
+     * @param string $desc Json data
+     *
+     * @return Data
+     */
     private function createDataObject($desc)
     {
         $data = new Data();
